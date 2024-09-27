@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.hp</groupId>
-	<artifactId>FinalAssignment</artifactId>
+	<artifactId>IMS</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ims</name>
-	<description>Ïnventory Management System</description>
+	<description>Inventory Management System</description>
 	<url/>
 	<licenses>
 		<license/>
