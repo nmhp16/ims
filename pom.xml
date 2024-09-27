@@ -11,7 +11,7 @@
 	<groupId>com.hp</groupId>
 	<artifactId>IMS</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ims</name>
+	<name>IMS</name>
 	<description>Inventory Management System</description>
 	<url/>
 	<licenses>
