@@ -11,8 +11,8 @@
 	<groupId>com.hp</groupId>
 	<artifactId>FinalAssignment</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>FinalAssignment</name>
-	<description>Demo project for Spring Boot</description>
+	<name>ims</name>
+	<description>Ïnventory Management System</description>
 	<url/>
 	<licenses>
 		<license/>
