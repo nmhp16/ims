@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.hp</groupId>
-	<artifactId>FinalAssignment</artifactId>
+	<artifactId>IMS</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>FinalAssignment</name>
-	<description>Demo project for Spring Boot</description>
+	<name>IMS</name>
+	<description>Inventory Management System</description>
 	<url/>
 	<licenses>
 		<license/>
