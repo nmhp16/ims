@@ -2,7 +2,7 @@
 
 ## Description
 
-The Item Management System (IMS) is a Java-based web application developed using Spring Boot. It enables efficient management of items through CRUD (Create, Read, Update, Delete) operations. The system uses a MySQL database for persistent data storage and includes a RESTful API for external interactions. Additionally, it supports an H2 in-memory database for development and testing.
+The Item Management System (IMS) is a Java-based dynamic web application developed using the Spring Boot framework. It enables efficient management of items through CRUD (Create, Read, Update, Delete) operations. The system uses a MySQL database for persistent data storage and includes a RESTful API for external interactions. Additionally, it supports an H2 in-memory database for development and testing.
 
 ## Features
 
