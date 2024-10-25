@@ -1,4 +1,4 @@
-package com.hp.FinalAssignment;
+package com.hp.IMS;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
