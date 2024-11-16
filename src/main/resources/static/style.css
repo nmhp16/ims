@@ -1,0 +1,133 @@
+/* Basic styling for the webpage */
+body {
+    font-family: 'Trebuchet MS', sans-serif; /* Sets font style */
+    font-size: 20px;
+    margin: 20px; /* Adds margin around the content */
+    background-color: rgb(243, 248, 246);   /* Sets background color for the main heading */
+}
+table {
+    width: 100%; /* Table takes full width of its container */
+    border-collapse: collapse; /* Collapses table borders into a single border */
+}
+th, td {
+    padding: 8px 12px; /* Adds padding inside table cells */
+    border: 1px solid rgb(199, 198, 198); /* Adds border around table cells */
+    text-align: left; /* Aligns text to the left inside cells */
+}
+th {
+    background-color: rgb(220, 252, 236);/* Sets background color for table headers */
+}
+h1 {
+    margin-bottom: 20px; /* Adds margin below the main heading */
+}
+.form-container, .search-container, .edit-container {
+    margin-bottom: 20px; /* Adds margin below each section */
+}
+input, button {
+    margin-right: 10px; /* Adds margin between form elements */
+}
+.hidden {
+    display: none; /* Hides elements with this class */
+}
+.edit-container {
+    display: none; /* Initially hides the edit form */
+    margin-top: 40px; /* Adds margin above the edit form */
+}
+
+#editPrice, #editQuantity, #editName, #editBrand, #editSerial {
+    border: 1px solid black; /* Adds border around input fields */  
+    width: 140px; /* Sets the width of input fields */
+    height: 30px;
+    font-style: italic;
+    font-family: 'Trebuchet MS', sans-serif; /* Sets font style */;
+    border-radius: 5px; /* Sets arc for input fields */
+    font-size: 15px;
+}
+
+#saveEditButton, #cancelEditButton {
+    height: 35px;
+    font-family: 'Trebuchet MS', sans-serif; /* Sets font style */;
+    background-color: rgba(186, 190, 186, 0.973) /* Sets background color for the button */;
+    color: white;   /* Sets text color */
+    border-radius: 5px; /* Sets arc for input fields */
+    font-size: 15px;
+    width: 100px;
+}
+
+#saveEditButton {
+    background-color: rgb(9, 224, 117);
+}
+
+.search-container {
+    margin-top: 40px;   /* Adds margin above the search form */
+}
+
+#name, #quantity, #price, #brand, #serial {
+    border: 1px solid black; /* Adds border around input fields */
+    width: 140px; /* Sets the width of input fields */
+    height: 30px;
+    font-style: italic;
+    font-family: 'Trebuchet MS', sans-serif; /* Sets font style */;
+    border-radius: 5px; /* Sets arc for input fields */
+    font-size: 15px;
+}
+
+#addItemButton {
+    height: 35px;
+    width: 100px;
+    font-family: 'Trebuchet MS', sans-serif; /* Sets font style */;
+    background-color: rgb(9, 224, 117); /* Sets background color for the button */
+    color: white;   /* Sets text color */
+    border-radius: 5px; /* Sets arc for input fields */
+    font-size: 20px;
+}
+
+#mainHeading {
+    text-align: center; /* Centers the main heading */
+    
+}
+
+#searchInput {
+    width: 220px; /* Sets the width of the search input */
+    height: 30px;
+    border: 1px solid black;
+    font-family: 'Trebuchet MS', sans-serif; /* Sets font style */;
+    font-style: italic;
+    border-radius: 5px; /* Sets arc for input fields */
+    font-size: 15px;
+}
+#searchButton {
+    height: 35px;
+    width: 100px;
+    font-family: 'Trebuchet MS', sans-serif; /* Sets font style */;
+    background-color: rgba(186, 190, 186, 0.973) /* Sets background color for the button */;
+    color: white;   /* Sets text color */
+    border-radius: 5px; /* Sets arc for input fields */
+    font-size: 20px;
+}
+
+#editButton, #deleteButton {
+    height: 25px;
+    width: 70px;
+    font-family: 'Trebuchet MS', sans-serif; /* Sets font style */;
+    border-radius: 5px; /* Sets arc for input fields */
+    font-size: 15px;
+}
+
+#editButton {
+    background-color: rgba(255, 166, 0, 0.993);
+    color:rgb(255, 255, 255);
+}
+
+#deleteButton {
+    background-color: rgba(255, 15, 15, 0.884);
+    color: white;
+}
+
+#nameLabel, #quantityLabel, #priceLabel, #brandLabel, #serialLabel {
+    font-family: 'Trebuchet MS', sans-serif; /* Sets font style */;
+}
+
+#totalPrice, #totalPriceHeading {
+    margin-top: 40px;
+}
