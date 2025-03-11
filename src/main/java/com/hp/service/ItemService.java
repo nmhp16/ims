@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-import com.hp.model.Item;
+
+import com.hp.entity.Item;
 import com.hp.repository.ItemRepository;
 
 /**
  * Service class that provides business logic related to items.
- * It uses the ItemRepository to perform CRUD operations and calculate the total price.
+ * It uses the ItemRepository to perform CRUD operations and calculate the total
+ * price.
  */
 @Service
 public class ItemService {
@@ -18,7 +20,9 @@ public class ItemService {
 
     /**
      * Constructor for ItemService.
-     * @param itemRepository The repository used for accessing and modifying items in the database.
+     * 
+     * @param itemRepository The repository used for accessing and modifying items
+     *                       in the database.
      */
     public ItemService(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
@@ -26,6 +30,7 @@ public class ItemService {
 
     /**
      * Retrieves all items from the repository.
+     * 
      * @return A list of all items.
      */
     public List<Item> getAllItems() {
@@ -34,8 +39,10 @@ public class ItemService {
 
     /**
      * Retrieves an item by its name.
+     * 
      * @param name The name of the item to retrieve.
-     * @return An Optional containing the item if found, otherwise an empty Optional.
+     * @return An Optional containing the item if found, otherwise an empty
+     *         Optional.
      */
     public Optional<Item> getItemByName(String name) {
         return itemRepository.findByName(name);
@@ -43,6 +50,7 @@ public class ItemService {
 
     /**
      * Adds a new item to the repository.
+     * 
      * @param item The item to add.
      * @return The added item.
      */
@@ -52,8 +60,9 @@ public class ItemService {
 
     /**
      * Updates an existing item with new details.
+     * 
      * @param existingItem The item to update.
-     * @param itemDetails The new details to update the item with.
+     * @param itemDetails  The new details to update the item with.
      * @return The updated item.
      */
     public Item updateItem(Item existingItem, Item itemDetails) {
@@ -67,6 +76,7 @@ public class ItemService {
 
     /**
      * Deletes an item from the repository.
+     * 
      * @param item The item to delete.
      */
     public void deleteItem(Item item) {
@@ -75,6 +85,7 @@ public class ItemService {
 
     /**
      * Calculates the total price of all items.
+     * 
      * @return The total price of all items.
      */
     public double calculateTotalPrice() {

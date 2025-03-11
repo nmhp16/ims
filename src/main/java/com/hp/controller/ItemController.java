@@ -1,6 +1,6 @@
-package com.hp.controllers;
+package com.hp.controller;
 
-import com.hp.model.Item;
+import com.hp.entity.Item;
 import com.hp.service.ItemService;
 
 import jakarta.annotation.PostConstruct;

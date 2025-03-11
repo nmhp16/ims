@@ -1,7 +1,12 @@
 let editingItemName = ''; // Variable to keep track of the item being edited
 
 
-// Function to load items from the server and display them in a table
+
+/**
+ * Loads the items list from the server and displays it in the page.
+ * If query is provided, it will filter the items by name.
+ * @param {string} [query] - The query to filter the items by name.
+ */
 function loadItems(query = '') {
     fetch('/items')
         .then(response => response.json())
@@ -41,7 +46,14 @@ function loadItems(query = '') {
         });
 }
 
-// Function to add a new item to the server
+
+/**
+ * Handles the form submission for adding a new item.
+ * Prevents the page from reloading and posts the item data to the server.
+ * Reloads the items list and resets the form fields after adding.
+ * Logs an error if adding fails.
+ * @param {Event} event - The form submission event.
+ */
 function addItem(event) {
     event.preventDefault(); // Prevent form submission from reloading the page
     const name = document.getElementById('name').value;
@@ -72,7 +84,12 @@ function addItem(event) {
     });
 }
 
-// Function to delete an item by name
+
+/**
+ * Deletes an item by its name.
+ * @param {string} name - The name of the item to delete.
+ * @return {Promise<void>} A promise that resolves when the deletion is complete or rejects if there's an error.
+ */
 function deleteItem(name) {
     fetch(`/items/${name}`, {
         method: 'DELETE'
@@ -89,13 +106,23 @@ function deleteItem(name) {
     });
 }
 
-// Function to search for items based on a query string
+
+/**
+ * Triggers the item list reload with the current search query.
+ * It reads the value from the search input and calls the loadItems function with the query.
+ */
 function searchItems() {
     const query = document.getElementById('searchInput').value;
     loadItems(query); // Reload items with the search query
 }
 
-// Function to load and display the total price of all items
+
+/**
+ * Loads the total price of all items from the server and displays it in the page.
+ * It uses the /items/total-price endpoint to fetch the total price and updates the
+ * #totalPrice element with the result.
+ * Logs an error if fetching the total price fails.
+ */
 function loadTotalPrice() {
     fetch('/items/total-price')
         .then(response => response.json())
@@ -107,7 +134,15 @@ function loadTotalPrice() {
         });
 }
 
-// Function to display the edit form with pre-filled item details
+
+/**
+ * Shows the edit form with the given item details pre-filled.
+ * @param {string} name - The name of the item to edit.
+ * @param {number} quantity - The quantity of the item to edit.
+ * @param {number} price - The price of the item to edit.
+ * @param {string} brand - The brand of the item to edit.
+ * @param {string} serial - The serial number of the item to edit.
+ */
 function showEditForm(name, quantity, price, brand, serial) {
     const editFormContainer = document.getElementById('editFormContainer');
     document.getElementById('editName').value = name;
@@ -119,12 +154,22 @@ function showEditForm(name, quantity, price, brand, serial) {
     editFormContainer.style.display = 'block'; // Show the edit form
 }
 
-// Function to cancel editing and hide the edit form
+
+/**
+ * Hides the edit form and clears the item being edited.
+ */
 function cancelEdit() {
     document.getElementById('editFormContainer').style.display = 'none'; // Hide the edit form
 }
 
-// Function to update an item with new details
+
+/**
+ * Handles the form submission for updating an item.
+ * Prevents the page from reloading and updates the item with the new details.
+ * Reloads the items list and hides the edit form after updating.
+ * Logs an error if updating fails.
+ * @param {Event} event - The form submission event.
+ */
 function updateItem(event) {
     event.preventDefault(); // Prevent form submission from reloading the page
     const newName = document.getElementById('editName').value;

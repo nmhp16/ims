@@ -1,4 +1,4 @@
-package com.hp.model;
+package com.hp.entity;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
@@ -24,15 +24,17 @@ public class Item {
     private List<String> tags = new ArrayList<>();
 
     // Default constructor
-    public Item() {}
+    public Item() {
+    }
 
     // Constructor with parameters
     /**
      * Constructs a new Item with the specified details.
-     * @param name The name of the item.
+     * 
+     * @param name     The name of the item.
      * @param quantity The quantity of the item.
-     * @param price The price of the item.
-     * @param tags A list of tags associated with the item.
+     * @param price    The price of the item.
+     * @param tags     A list of tags associated with the item.
      */
     public Item(String name, int quantity, double price, List<String> tags) {
         this.name = name;
@@ -45,6 +47,7 @@ public class Item {
 
     /**
      * Returns the unique identifier of the item.
+     * 
      * @return The id of the item.
      */
     public Long getId() {
@@ -53,6 +56,7 @@ public class Item {
 
     /**
      * Sets the unique identifier of the item.
+     * 
      * @param id The id to set.
      */
     public void setId(Long id) {
@@ -61,6 +65,7 @@ public class Item {
 
     /**
      * Returns the name of the item.
+     * 
      * @return The name of the item.
      */
     public String getName() {
@@ -69,6 +74,7 @@ public class Item {
 
     /**
      * Sets the name of the item.
+     * 
      * @param name The name to set.
      */
     public void setName(String name) {
@@ -77,6 +83,7 @@ public class Item {
 
     /**
      * Returns the quantity of the item.
+     * 
      * @return The quantity of the item.
      */
     public int getQuantity() {
@@ -85,6 +92,7 @@ public class Item {
 
     /**
      * Sets the quantity of the item.
+     * 
      * @param quantity The quantity to set.
      */
     public void setQuantity(int quantity) {
@@ -93,6 +101,7 @@ public class Item {
 
     /**
      * Returns the price of the item.
+     * 
      * @return The price of the item.
      */
     public double getPrice() {
@@ -101,6 +110,7 @@ public class Item {
 
     /**
      * Sets the price of the item.
+     * 
      * @param price The price to set.
      */
     public void setPrice(double price) {
@@ -109,6 +119,7 @@ public class Item {
 
     /**
      * Returns the list of tags associated with the item.
+     * 
      * @return The list of tags.
      */
     public List<String> getTags() {
@@ -117,6 +128,7 @@ public class Item {
 
     /**
      * Sets the list of tags associated with the item.
+     * 
      * @param tags The list of tags to set.
      */
     public void setTags(List<String> tags) {
@@ -125,6 +137,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item [id=" + id + ", name=" + name + ", quantity=" + quantity + ", tags=" + tags + ", price=" + price + "]";
+        return "Item [id=" + id + ", name=" + name + ", quantity=" + quantity + ", tags=" + tags + ", price=" + price
+                + "]";
     }
 }

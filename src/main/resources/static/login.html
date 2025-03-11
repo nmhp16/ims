@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-app="authApp" ng-controller="AuthController">
+    <h2>Login</h2>
+    
+    <form ng-submit="login()">
+        <label for="username">Username:</label>
+        <input type="text" id="username" ng-model="user.username" required><br><br>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" ng-model="user.password" required><br><br>
+        
+        <button id="loginButton" type="submit">Login</button>
+    </form>
+
+    <h2>Register</h2>
+
+    <form ng-submit="register()">
+        <label for="regUsername">Username:</label>
+        <input type="text" id="regUsername" ng-model="newUser.username" required><br><br>
+        
+        <label for="regPassword">Password:</label>
+        <input type="password" id="regPassword" ng-model="newUser.password" required><br><br>
+        
+        <button id="registerButton" type="submit">Register</button>
+    </form>
+
+    <p style="color: red;" ng-if="errorMessage">{{ errorMessage }}</p>
+    <p style="color: green;" ng-if="successMessage">{{ successMessage }}</p>
+
+    <script>
+        var app = angular.module("authApp", []);
+        
+        app.controller("AuthController", function ($scope, $http) {
+            $scope.user = {};
+            $scope.newUser = {};
+            $scope.errorMessage = "";
+            $scope.successMessage = "";
+
+            // Login function
+            $scope.login = function () {
+                $http.post("/auth/login", $scope.user)
+                    .then(function (response) {
+                        localStorage.setItem("jwt", response.data.token);
+                        $scope.errorMessage = "";
+
+                        // Redirect to home page
+                        window.location.href = "/"; 
+                    })
+                    .catch(function () {
+                        $scope.errorMessage = "Invalid credentials!";
+                    });
+            };
+
+            // Register function
+            $scope.register = function () {
+                $http.post("/auth/register", $scope.newUser)
+                    .then(function (response) {
+                        console.log(response.data.message);
+                        $scope.successMessage = response.data.message;
+                        $scope.errorMessage = "";
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        $scope.errorMessage = "Registration failed!";
+                    });
+            };
+        });
+    </script>
+</body>
+</html>
