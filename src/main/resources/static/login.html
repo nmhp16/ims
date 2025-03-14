@@ -5,72 +5,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }
+        h2 {
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            width: 300px;
+        }
+        input {
+            width: 90%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .toggle {
+            background-color: #007bff;
+            margin-top: 10px;
+        }
+        .toggle:hover {
+            background-color: #0056b3;
+        }
+        p {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body ng-app="authApp" ng-controller="AuthController">
-    <h2>Login</h2>
+    <div class="container">
+        <h2>{{ isLogin ? 'Login' : 'Register' }}</h2>
+        <form ng-submit="isLogin ? login() : register()">
+            <label for="username">Username:</label>
+            <input type="text" id="username" ng-model="user.username" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" ng-model="user.password" required>
+            
+            <button type="submit">{{ isLogin ? 'Login' : 'Register' }}</button>
+        </form>
+        
+        <button class="toggle" ng-click="toggleForm()">{{ isLogin ? 'Switch to Register' : 'Switch to Login' }}</button>
+        
+        <p style="color: red;" ng-if="errorMessage">{{ errorMessage }}</p>
+        <p style="color: green;" ng-if="successMessage">{{ successMessage }}</p>
+    </div>
     
-    <form ng-submit="login()">
-        <label for="username">Username:</label>
-        <input type="text" id="username" ng-model="user.username" required><br><br>
-        
-        <label for="password">Password:</label>
-        <input type="password" id="password" ng-model="user.password" required><br><br>
-        
-        <button id="loginButton" type="submit">Login</button>
-    </form>
-
-    <h2>Register</h2>
-
-    <form ng-submit="register()">
-        <label for="regUsername">Username:</label>
-        <input type="text" id="regUsername" ng-model="newUser.username" required><br><br>
-        
-        <label for="regPassword">Password:</label>
-        <input type="password" id="regPassword" ng-model="newUser.password" required><br><br>
-        
-        <button id="registerButton" type="submit">Register</button>
-    </form>
-
-    <p style="color: red;" ng-if="errorMessage">{{ errorMessage }}</p>
-    <p style="color: green;" ng-if="successMessage">{{ successMessage }}</p>
-
     <script>
         var app = angular.module("authApp", []);
         
         app.controller("AuthController", function ($scope, $http) {
             $scope.user = {};
-            $scope.newUser = {};
             $scope.errorMessage = "";
             $scope.successMessage = "";
-
-            // Login function
+            $scope.isLogin = true;
+            
+            $scope.toggleForm = function () {
+                $scope.isLogin = !$scope.isLogin;
+                $scope.errorMessage = "";
+                $scope.successMessage = "";
+            };
+            
             $scope.login = function () {
                 $http.post("/auth/login", $scope.user)
                     .then(function (response) {
                         localStorage.setItem("jwt", response.data.token);
                         $scope.errorMessage = "";
-
-                        // Add authentication header to future requests
                         $http.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
-
-                        // Redirect to items page after successful login
                         window.location.href = "/items.html";
                     })
                     .catch(function () {
                         $scope.errorMessage = "Invalid credentials!";
                     });
             };
-
-            // Register function
+            
             $scope.register = function () {
-                $http.post("/auth/register", $scope.newUser)
+                $http.post("/auth/register", $scope.user)
                     .then(function (response) {
-                        console.log(response.data.message);
                         $scope.successMessage = response.data.message;
                         $scope.errorMessage = "";
                     })
-                    .catch(function (error) {
-                        console.log(error);
+                    .catch(function () {
                         $scope.errorMessage = "Registration failed!";
                     });
             };

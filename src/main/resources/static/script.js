@@ -1,7 +1,5 @@
 let editingItemName = ''; // Variable to keep track of the item being edited
 
-
-
 /**
  * Loads the items list from the server and displays it in the page.
  * If query is provided, it will filter the items by name.
