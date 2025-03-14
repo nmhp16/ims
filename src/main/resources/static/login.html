@@ -50,8 +50,11 @@
                         localStorage.setItem("jwt", response.data.token);
                         $scope.errorMessage = "";
 
-                        // Redirect to home page
-                        window.location.href = "/"; 
+                        // Add authentication header to future requests
+                        $http.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
+
+                        // Redirect to items page after successful login
+                        window.location.href = "/items.html";
                     })
                     .catch(function () {
                         $scope.errorMessage = "Invalid credentials!";

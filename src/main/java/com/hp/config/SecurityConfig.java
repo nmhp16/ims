@@ -25,7 +25,7 @@ public class SecurityConfig {
     private JwtAuthenticationFilter jwtAuthenticationFilter; // Injected instead of manually instantiated
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+    AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         // Let Spring Boot auto-configure the AuthenticationManager, customized if
         // needed
         return http.getSharedObject(AuthenticationManagerBuilder.class)
@@ -36,24 +36,26 @@ public class SecurityConfig {
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register", "/login.html", "/", "/static/**").permitAll() // Permit
-                        // login
-                        // &
-                        // register
+                        .requestMatchers("/auth/login", "/auth/register", "/login.html", "/", "/actuator/**",
+                                "/style.css", "/script.js", "/js/**", "/*.html", "/*.js", "/*.css")
+                        .permitAll() // Permit all requests for login, registration, and static resources
                         .anyRequest().authenticated()) // All other requests need authentication
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless
                                                                                                         // sessions
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Custom filter
                                                                                                        // before default
                                                                                                        // filter
+
+        // Add CORS configuration
+        http.cors(cors -> cors.configure(http));
 
         return http.build();
     }

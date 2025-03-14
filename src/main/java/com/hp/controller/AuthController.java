@@ -26,6 +26,8 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
+    // http://localhost:8080/auth/login
+    // Login
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody AuthRequest request) {
         authenticationManager
@@ -34,6 +36,8 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(token));
     }
 
+    // http://localhost:8080/auth/register
+    // Register
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         if (userRepository.existsByUsername(user.getUsername())) {

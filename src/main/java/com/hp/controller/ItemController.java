@@ -38,7 +38,7 @@ public class ItemController {
         return "<h1> Welcome to the Item Management System! </h1>" +
                 "<br>" +
                 "<span style='font-size: 20px;'>Please click on </span>" +
-                "<a href='/items.html' style='font-size: 25px;'>items</a>" +
+                "<a href='/login.html' style='font-size: 25px;'>Login</a>" +
                 "<span style='font-size: 20px;'> to view the items list</span>";
     }
 

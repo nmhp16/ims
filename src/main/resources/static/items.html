@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Item List</title>
     <link rel="stylesheet" href="style.css">
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 </head>
-<body>
+<body ng-app="itemsApp" ng-controller="ItemsController">
+    <!-- Add logout button -->
+    <div class="header-controls">
+        <button onclick="logout()" class="logout-btn">Logout</button>
+    </div>
     
     <!-- Main heading -->
     <h1 id="mainHeading">ITEM LIST</h1>
@@ -64,7 +68,86 @@
         <!-- Item list will be dynamically loaded here -->
     </div>   
 
+    <script>
+        // Initialize Angular app
+        var app = angular.module('itemsApp', []);
+        
+        app.controller('ItemsController', function($scope, $http) {
+            // Check for token on page load
+            var token = localStorage.getItem('jwt');
+            if (!token) {
+                console.log('No token found, redirecting to login');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Set default headers for all requests
+            $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+
+            // Test authentication with a simple request
+            $http.get('/api/test')
+                .then(function(response) {
+                    console.log('Authentication successful');
+                })
+                .catch(function(error) {
+                    console.error('Authentication error:', error);
+                    if (error.status === 401 || error.status === 403) {
+                        console.log('Token invalid or expired, redirecting to login');
+                        localStorage.removeItem('jwt');
+                        window.location.href = '/login.html';
+                    }
+                });
+        });
+
+        // Logout function
+        function logout() {
+            console.log('Logging out...');
+            localStorage.removeItem('jwt');
+            window.location.href = '/login.html';
+        }
+
+        // Intercept all fetch requests to add the token
+        const originalFetch = window.fetch;
+        window.fetch = function() {
+            let args = arguments;
+            const token = localStorage.getItem('jwt');
+            
+            if (token) {
+                if (args.length >= 2 && args[1].headers) {
+                    args[1].headers = {
+                        ...args[1].headers,
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    };
+                } else if (args.length >= 2) {
+                    args[1] = {
+                        ...args[1],
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Content-Type': 'application/json'
+                        }
+                    };
+                } else {
+                    args = [args[0], {
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Content-Type': 'application/json'
+                        }
+                    }];
+                }
+            }
+            return originalFetch.apply(this, args)
+                .then(response => {
+                    if (response.status === 401 || response.status === 403) {
+                        console.log('Token invalid or expired, redirecting to login');
+                        localStorage.removeItem('jwt');
+                        window.location.href = '/login.html';
+                    }
+                    return response;
+                });
+        };
+    </script>
+
     <script src="script.js"></script>
-    
 </body>
 </html>
