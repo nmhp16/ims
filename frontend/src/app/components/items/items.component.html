@@ -1,0 +1,160 @@
+<div class="app-container">
+  <div class="header">
+    <h1>Inventory Dashboard</h1>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">📦</div>
+      <div class="stat-content">
+        <div class="stat-value">{{items.length}}</div>
+        <div class="stat-label">Total Items</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⚠️</div>
+      <div class="stat-content">
+        <div class="stat-value">{{getLowStockCount()}}</div>
+        <div class="stat-label">Low Stock Items</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-content">
+        <div class="stat-value">{{getTotalValue() | currency}}</div>
+        <div class="stat-label">Total Value</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-content">
+        <div class="stat-value">{{getAveragePrice() | currency}}</div>
+        <div class="stat-label">Average Price</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Stock Levels</h3>
+      <canvas #stockChart></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Value Distribution</h3>
+      <canvas #valueChart></canvas>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="sidebar">
+      <div class="form-container">
+        <h3>Add New Item</h3>
+        <form (ngSubmit)="addItem()" #itemForm="ngForm">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" [(ngModel)]="newItem.name" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="quantity">Quantity</label>
+              <input type="number" id="quantity" name="quantity" [(ngModel)]="newItem.quantity" required>
+            </div>
+            <div class="form-group">
+              <label for="price">Price</label>
+              <input type="number" id="price" name="price" [(ngModel)]="newItem.price" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" name="brand" [(ngModel)]="newItem.brand" required>
+          </div>
+          <div class="form-group">
+            <label for="serialNumber">Serial Number</label>
+            <input type="text" id="serialNumber" name="serialNumber" [(ngModel)]="newItem.serialNumber" required>
+          </div>
+          <button type="submit" class="btn-primary" [disabled]="!itemForm.form.valid">Add Item</button>
+        </form>
+      </div>
+
+      <div class="search-container">
+        <h3>Search Items</h3>
+        <div class="search-input-group">
+          <input type="text" [(ngModel)]="searchTerm" placeholder="Search items...">
+          <button class="btn-secondary" (click)="searchItems()">Search</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="item-list">
+      <table *ngIf="items.length > 0">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Brand</th>
+            <th>Serial Number</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items" [class.low-stock]="item.quantity < 5">
+            <td>{{item.name}}</td>
+            <td>{{item.quantity}}</td>
+            <td>{{item.price | currency}}</td>
+            <td>{{item.brand}}</td>
+            <td>{{item.serialNumber}}</td>
+            <td class="actions">
+              <button class="btn-edit" (click)="editItem(item)">Edit</button>
+              <button class="btn-delete" (click)="deleteItem(item)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="items.length === 0" class="empty-state">
+        <div class="empty-icon">📦</div>
+        <p>No items found. Add some items to get started!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="editingItem">
+  <div class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Edit Item</h3>
+        <button class="close-btn" (click)="cancelEdit()">×</button>
+      </div>
+      <form (ngSubmit)="updateItem()" #editForm="ngForm">
+        <div class="form-group">
+          <label for="editName">Name</label>
+          <input type="text" id="editName" name="editName" [(ngModel)]="editingItem.name" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editQuantity">Quantity</label>
+            <input type="number" id="editQuantity" name="editQuantity" [(ngModel)]="editingItem.quantity" required>
+          </div>
+          <div class="form-group">
+            <label for="editPrice">Price</label>
+            <input type="number" id="editPrice" name="editPrice" [(ngModel)]="editingItem.price" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="editBrand">Brand</label>
+          <input type="text" id="editBrand" name="editBrand" [(ngModel)]="editingItem.brand" required>
+        </div>
+        <div class="form-group">
+          <label for="editSerialNumber">Serial Number</label>
+          <input type="text" id="editSerialNumber" name="editSerialNumber" [(ngModel)]="editingItem.serialNumber" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" (click)="cancelEdit()">Cancel</button>
+          <button type="submit" class="btn-primary" [disabled]="!editForm.form.valid">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
