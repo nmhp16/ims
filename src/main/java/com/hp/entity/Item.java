@@ -1,6 +1,8 @@
 package com.hp.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +18,22 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Name is required")
     private String name;
+
+    @Min(value = 0, message = "Quantity cannot be negative")
     private int quantity;
+
+    @Min(value = 0, message = "Price cannot be negative")
     private double price;
+
+    private java.time.LocalDate expirationDate;
+
+    @Min(value = 0, message = "Min Quantity cannot be negative")
+    private int minQuantity;
+
+    @NotBlank(message = "Category is required")
+    private String category;
 
     @ElementCollection
     private List<String> tags = new ArrayList<>();
@@ -35,12 +50,44 @@ public class Item {
      * @param quantity The quantity of the item.
      * @param price    The price of the item.
      * @param tags     A list of tags associated with the item.
+     * @param expirationDate The expiration date of the item.
+     * @param minQuantity The minimum quantity before alert.
+     * @param category The category of the item.
      */
-    public Item(String name, int quantity, double price, List<String> tags) {
+    public Item(String name, int quantity, double price, List<String> tags, java.time.LocalDate expirationDate, int minQuantity, String category) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
         this.tags = tags;
+        this.expirationDate = expirationDate;
+        this.minQuantity = minQuantity;
+        this.category = category;
+    }
+
+    // Getters and setters
+
+    public java.time.LocalDate getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(java.time.LocalDate expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public int getMinQuantity() {
+        return minQuantity;
+    }
+
+    public void setMinQuantity(int minQuantity) {
+        this.minQuantity = minQuantity;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     // Getters and setters

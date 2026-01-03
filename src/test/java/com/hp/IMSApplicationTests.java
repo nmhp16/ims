@@ -1,10 +1,10 @@
-package com.hp.IMS;
+package com.hp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class FinalAssignmentApplicationTests {
+class IMSApplicationTests {
 
 	@Test
 	void contextLoads() {

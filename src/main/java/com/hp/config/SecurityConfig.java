@@ -42,20 +42,20 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register", "/login.html", "/", "/actuator/**",
-                                "/style.css", "/script.js", "/js/**", "/*.html", "/*.js", "/*.css")
-                        .permitAll() // Permit all requests for login, registration, and static resources
-                        .anyRequest().authenticated()) // All other requests need authentication
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless
-                                                                                                        // sessions
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Custom filter
-                                                                                                       // before default
-                                                                                                       // filter
+        http.csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/auth/login", "/auth/register", "/login.html", "/", "/actuator/**",
+                        "/style.css", "/login.js", "/dashboard.js", "/js/**", "/*.html", "/*.js", "/*.css",
+                        "/swagger-ui/**", "/v3/api-docs/**")
+                .permitAll() // Permit all requests for login, registration, and static resources
+                .anyRequest().authenticated() // All other requests need authentication
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Stateless sessions
+                .and()
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Custom filter before default filter
 
         // Add CORS configuration
-        http.cors(cors -> cors.configure(http));
+        http.cors();
 
         return http.build();
     }

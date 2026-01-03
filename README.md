@@ -7,17 +7,18 @@ The Item Management System (IMS) is a Java-based dynamic web application develop
 ## Features
 
 - **CRUD Operations**: Perform create, read, update, and delete operations on items.
-- **MySQL Database**: Utilizes MySQL for persistent storage and retrieval of item information.
+- **Persistent Storage**: Uses file-based H2 database for data persistence.
 - **RESTful API**: Offers a web API for programmatic management of items.
+- **API Documentation**: Swagger UI available at `/swagger-ui/index.html`.
+- **Input Validation**: Robust validation for data integrity.
 - **Web Interface**: Provides a user-friendly interface for manual interaction with the system.
-- **H2 Database**: In-memory database support for development and testing environments.
 
 ## Technologies Used
 
 - **Languages**: Java, HTML/CSS, JavaScript
-- **Frameworks**: Spring Boot
-- **Databases**: MySQL, H2
-- **Tools**: Git, Postman
+- **Frameworks**: Spring Boot, Bootstrap 5
+- **Databases**: H2 (File-based)
+- **Tools**: Git, Postman, Swagger UI
 - **Build Management**: Maven
 
 ## Requirements

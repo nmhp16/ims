@@ -3,151 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Item List</title>
+    <title>Dashboard - Smart Inventory</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 </head>
-<body ng-app="itemsApp" ng-controller="ItemsController">
-    <!-- Add logout button -->
-    <div class="header-controls">
-        <button onclick="logout()" class="logout-btn">Logout</button>
-    </div>
-    
-    <!-- Main heading -->
-    <h1 id="mainHeading">ITEM LIST</h1>
-    
-    <!-- Form for adding a new item -->
-    <div class="form-container">
-        <h3>ADD ITEM</h3>
-        <form id="addItemForm">
-            <label for="name" id="nameLabel">Name:</label>
-            <input type="text" id="name" placeholder="Item name" name="name" required>
-            <label for="quantity" id="quantityLabel">Quantity:</label>
-            <input type="number" id="quantity" placeholder="0" name="quantity" required>
-            <label for="price" id="priceLabel">Price:</label>
-            <input type="number" id="price" name="price" placeholder="0.00" step="0.01" required>
-            <label for="brand" id="brandLabel">Brand:</label>
-            <input type="text" id="brand" name="brand" placeholder="Brand name" required>
-            <label for="serial" id="serialLabel">Serial Number:</label>
-            <input type="text" id="serial" name="serial" placeholder="Serial number" required>
-            <button type="submit" id = "addItemButton">Add Item</button> <!-- Submit button to add item -->
-        </form>
-    </div>
-    
-    <!-- Search functionality to filter items by name -->
-    <div class="search-container">
-        <h3>SEARCH ITEM</h3>
-        <input type="text" id="searchInput" placeholder="Search by name...">
-        <button id = "searchButton" onclick="searchItems()">Search</button> <!-- Button to trigger search -->
-    </div>
-    
-    <!-- Edit form for updating item details -->
-    <div class="edit-container" id="editFormContainer">
-        <h3>EDIT ITEM</h3>
-        <form id="editItemForm">
-            <label for="editName">Name:</label>
-            <input type="text" id="editName">
-            <label for="editQuantity">Quantity:</label>
-            <input type="number" id="editQuantity">
-            <label for="editPrice">Price:</label>
-            <input type="number" id="editPrice" step="0.01">
-            <label for="editBrand">Brand:</label>
-            <input type="text" id="editBrand">
-            <label for="editSerial">Serial Number:</label>
-            <input type="text" id="editSerial">
-            <button type="submit" id="saveEditButton">Save</button> <!-- Submit button to save changes -->
-            <button type="button" id="cancelEditButton" onclick="cancelEdit()">Cancel</button> <!-- Button to cancel editing -->
-        </form>
-    </div>
-    
-    <!-- Displays the total price of all items -->
-    <h3 id ="totalPriceHeading">TOTAL PRICE: $<span id="totalPrice">0.00</span></h3>
-    
-    <!-- Container for displaying the list of items -->
-    <div id="itemList">
-        <!-- Item list will be dynamically loaded here -->
-    </div>   
+<body class="bg-light">
 
-    <script>
-        // Initialize Angular app
-        var app = angular.module('itemsApp', []);
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#"><i class="bi bi-box-seam me-2"></i>Smart Inventory</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item me-3">
+                        <span class="text-white" id="userInfo">Welcome, User</span>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light btn-sm" onclick="logout()">Logout</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
         
-        app.controller('ItemsController', function($scope, $http) {
-            // Check for token on page load
-            var token = localStorage.getItem('jwt');
-            if (!token) {
-                console.log('No token found, redirecting to login');
-                window.location.href = '/login.html';
-                return;
-            }
+        <!-- Stats Cards -->
+        <div class="row mb-4 g-3">
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="bi bi-boxes text-primary fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-0">Total Items</h6>
+                            <h4 class="fw-bold mb-0" id="statTotalItems">0</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="bi bi-currency-dollar text-success fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-0">Total Value</h6>
+                            <h4 class="fw-bold mb-0" id="statTotalValue">$0</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="bg-warning bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="bi bi-exclamation-triangle text-warning fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-0">Low Stock</h6>
+                            <h4 class="fw-bold mb-0" id="statLowStock">0</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="bg-info bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="bi bi-upc-scan text-info fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-0">Unique Products</h6>
+                            <h4 class="fw-bold mb-0" id="statUnique">0</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            // Set default headers for all requests
-            $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+        <!-- Main Content Tabs -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-bottom-0 pt-3 px-4">
+                <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory" type="button">Inventory List</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="alerts-tab" data-bs-toggle="tab" data-bs-target="#alerts" type="button">Alerts <span class="badge bg-danger rounded-pill ms-1" id="alertBadge">0</span></button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="transactions-tab" data-bs-toggle="tab" data-bs-target="#transactions" type="button">Transactions</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body p-4">
+                <div class="tab-content" id="myTabContent">
+                    
+                    <!-- Inventory Tab -->
+                    <div class="tab-pane fade show active" id="inventory">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="input-group" style="max-width: 300px;">
+                                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                                <input type="text" class="form-control border-start-0 ps-0" id="searchInput" placeholder="Search items...">
+                            </div>
+                            <div class="form-check form-switch ms-3 me-auto">
+                                <input class="form-check-input" type="checkbox" id="lowStockFilter">
+                                <label class="form-check-label" for="lowStockFilter">Low Stock Only</label>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-secondary me-2" onclick="refreshAll()"><i class="bi bi-arrow-clockwise me-1"></i> Refresh</button>
+                                <button class="btn btn-outline-secondary me-2" onclick="exportCsv()"><i class="bi bi-download me-1"></i> Export CSV</button>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addItemModal"><i class="bi bi-plus-lg me-1"></i> Add Item</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="cursor: pointer" onclick="sortItems('name')">Name <i class="bi bi-arrow-down-up small text-muted"></i></th>
+                                        <th style="cursor: pointer" onclick="sortItems('category')">Category <i class="bi bi-arrow-down-up small text-muted"></i></th>
+                                        <th style="cursor: pointer" onclick="sortItems('quantity')">Quantity <i class="bi bi-arrow-down-up small text-muted"></i></th>
+                                        <th style="cursor: pointer" onclick="sortItems('price')">Price <i class="bi bi-arrow-down-up small text-muted"></i></th>
+                                        <th style="cursor: pointer" onclick="sortItems('expirationDate')">Expiration <i class="bi bi-arrow-down-up small text-muted"></i></th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="itemsTableBody">
+                                    <!-- Items will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-            // Test authentication with a simple request
-            $http.get('/api/test')
-                .then(function(response) {
-                    console.log('Authentication successful');
-                })
-                .catch(function(error) {
-                    console.error('Authentication error:', error);
-                    if (error.status === 401 || error.status === 403) {
-                        console.log('Token invalid or expired, redirecting to login');
-                        localStorage.removeItem('jwt');
-                        window.location.href = '/login.html';
-                    }
-                });
-        });
+                    <!-- Alerts Tab -->
+                    <div class="tab-pane fade" id="alerts">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card h-100 border-danger border-opacity-25">
+                                    <div class="card-header bg-danger bg-opacity-10 text-danger fw-bold border-0">
+                                        <i class="bi bi-exclamation-circle me-2"></i> Low Stock Alerts
+                                    </div>
+                                    <div class="card-body" id="lowStockList">
+                                        <!-- Low stock items -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card h-100 border-warning border-opacity-25">
+                                    <div class="card-header bg-warning bg-opacity-10 text-warning-emphasis fw-bold border-0">
+                                        <i class="bi bi-clock-history me-2"></i> Expiring Soon (7 Days)
+                                    </div>
+                                    <div class="card-body" id="expiringList">
+                                        <!-- Expiring items -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-        // Logout function
-        function logout() {
-            console.log('Logging out...');
-            localStorage.removeItem('jwt');
-            window.location.href = '/login.html';
-        }
+                    <!-- Transactions Tab -->
+                    <div class="tab-pane fade" id="transactions">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Item</th>
+                                        <th>Type</th>
+                                        <th>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactionsTableBody">
+                                    <!-- Transactions -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // Intercept all fetch requests to add the token
-        const originalFetch = window.fetch;
-        window.fetch = function() {
-            let args = arguments;
-            const token = localStorage.getItem('jwt');
-            
-            if (token) {
-                if (args.length >= 2 && args[1].headers) {
-                    args[1].headers = {
-                        ...args[1].headers,
-                        'Authorization': 'Bearer ' + token,
-                        'Content-Type': 'application/json'
-                    };
-                } else if (args.length >= 2) {
-                    args[1] = {
-                        ...args[1],
-                        headers: {
-                            'Authorization': 'Bearer ' + token,
-                            'Content-Type': 'application/json'
-                        }
-                    };
-                } else {
-                    args = [args[0], {
-                        headers: {
-                            'Authorization': 'Bearer ' + token,
-                            'Content-Type': 'application/json'
-                        }
-                    }];
-                }
-            }
-            return originalFetch.apply(this, args)
-                .then(response => {
-                    if (response.status === 401 || response.status === 403) {
-                        console.log('Token invalid or expired, redirecting to login');
-                        localStorage.removeItem('jwt');
-                        window.location.href = '/login.html';
-                    }
-                    return response;
-                });
-        };
-    </script>
+    <!-- Edit Item Modal -->
+    <div class="modal fade" id="editItemModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editItemForm">
+                        <input type="hidden" id="editItemOriginalName">
+                        <div class="mb-3">
+                            <label class="form-label">Item Name</label>
+                            <input type="text" class="form-control" id="editItemName" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Category</label>
+                                <input type="text" class="form-control" id="editItemCategory" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Price ($)</label>
+                                <input type="number" class="form-control" id="editItemPrice" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Min Quantity</label>
+                                <input type="number" class="form-control" id="editItemMinQuantity" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Expiration Date</label>
+                                <input type="date" class="form-control" id="editItemExpiration">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Update Item</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <script src="script.js"></script>
+    <!-- Add Item Modal -->
+    <div class="modal fade" id="addItemModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addItemForm">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="itemName" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Category</label>
+                                <input type="text" class="form-control" id="itemCategory" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Price</label>
+                                <input type="number" step="0.01" class="form-control" id="itemPrice" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Quantity</label>
+                                <input type="number" class="form-control" id="itemQuantity" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Min Quantity</label>
+                                <input type="number" class="form-control" id="itemMinQuantity" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Expiration Date</label>
+                            <input type="date" class="form-control" id="itemExpiration">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Add Item</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adjust Stock Modal -->
+    <div class="modal fade" id="stockModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adjust Stock</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="stockItemName">
+                    <div class="mb-3">
+                        <label class="form-label">Action</label>
+                        <select class="form-select" id="stockType">
+                            <option value="IN">Add Stock (IN)</option>
+                            <option value="OUT">Remove Stock (OUT)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="stockQuantity" min="1" value="1">
+                    </div>
+                    <button onclick="submitTransaction()" class="btn btn-primary w-100">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="dashboard.js"></script>
 </body>
 </html>
